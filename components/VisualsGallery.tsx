@@ -1,73 +1,66 @@
-import React, { useState } from 'react';
-import { Wind, Activity, Info, Layers, Droplets, ArrowRight, PlayCircle } from 'lucide-react';
 
-type VisualType = 'pneumo' | 'compartment' | 'rhabdo';
+import React, { useState } from 'react';
+import { Wind, Activity, Info, Layers, Droplets, ArrowRight, PlayCircle, Brain, MoveVertical } from 'lucide-react';
+
+type VisualType = 'pneumo' | 'compartment' | 'rhabdo' | 'cranium' | 'columna';
 
 const VisualsGallery: React.FC = () => {
   const [activeVisual, setActiveVisual] = useState<VisualType>('pneumo');
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-12">
+    <div className="max-w-6xl mx-auto space-y-8 pb-12">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-slate-800">Interaktiv Visualisering</h2>
         <p className="text-slate-600 mt-2">Vælg et emne herunder for at starte simulationen:</p>
       </div>
 
-      {/* New Card-based Navigation */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <button 
-          onClick={() => setActiveVisual('pneumo')}
-          className={`p-4 rounded-xl border-2 text-left transition-all hover:-translate-y-1 ${
-            activeVisual === 'pneumo' 
-              ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' 
-              : 'border-slate-200 bg-white hover:border-blue-300'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <div className={`p-2 rounded-lg ${activeVisual === 'pneumo' ? 'bg-blue-200' : 'bg-slate-100'}`}>
-              <Wind className={`w-6 h-6 ${activeVisual === 'pneumo' ? 'text-blue-700' : 'text-slate-600'}`} />
-            </div>
-            {activeVisual === 'pneumo' && <PlayCircle className="w-5 h-5 text-blue-600" />}
-          </div>
-          <h3 className="font-bold text-slate-800">Pneumothorax</h3>
-          <p className="text-xs text-slate-500 mt-1">Lungekollaps og tryk</p>
-        </button>
-
-        <button 
-          onClick={() => setActiveVisual('compartment')}
-          className={`p-4 rounded-xl border-2 text-left transition-all hover:-translate-y-1 relative overflow-hidden ${
-            activeVisual === 'compartment' 
-              ? 'border-red-500 bg-red-50 ring-2 ring-red-200' 
-              : 'border-slate-200 bg-white hover:border-red-300'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <div className={`p-2 rounded-lg ${activeVisual === 'compartment' ? 'bg-red-200' : 'bg-slate-100'}`}>
-              <Layers className={`w-6 h-6 ${activeVisual === 'compartment' ? 'text-red-700' : 'text-slate-600'}`} />
-            </div>
-            {activeVisual === 'compartment' && <PlayCircle className="w-5 h-5 text-red-600" />}
-          </div>
-          <h3 className="font-bold text-slate-800">Kompartment</h3>
-          <p className="text-xs text-slate-500 mt-1">Tryk i muskellogen</p>
-        </button>
-
-        <button 
-          onClick={() => setActiveVisual('rhabdo')}
-          className={`p-4 rounded-xl border-2 text-left transition-all hover:-translate-y-1 relative overflow-hidden ${
-            activeVisual === 'rhabdo' 
-              ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-200' 
-              : 'border-slate-200 bg-white hover:border-amber-300'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <div className={`p-2 rounded-lg ${activeVisual === 'rhabdo' ? 'bg-amber-200' : 'bg-slate-100'}`}>
-              <Droplets className={`w-6 h-6 ${activeVisual === 'rhabdo' ? 'text-amber-700' : 'text-slate-600'}`} />
-            </div>
-            {activeVisual === 'rhabdo' && <PlayCircle className="w-5 h-5 text-amber-600" />}
-          </div>
-          <h3 className="font-bold text-slate-800">Rhabdomyolyse</h3>
-          <p className="text-xs text-slate-500 mt-1">Cellehenfald og nyre</p>
-        </button>
+      {/* Navigation Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <NavButton 
+            id="pneumo" 
+            active={activeVisual} 
+            onClick={setActiveVisual} 
+            icon={Wind} 
+            label="Pneumothorax" 
+            sub="Lungekollaps"
+            colorClass="blue"
+        />
+        <NavButton 
+            id="compartment" 
+            active={activeVisual} 
+            onClick={setActiveVisual} 
+            icon={Layers} 
+            label="Kompartment" 
+            sub="Muskeltryk"
+            colorClass="red"
+        />
+        <NavButton 
+            id="rhabdo" 
+            active={activeVisual} 
+            onClick={setActiveVisual} 
+            icon={Droplets} 
+            label="Rhabdomyolyse" 
+            sub="Nyresvigt"
+            colorClass="amber"
+        />
+        <NavButton 
+            id="cranium" 
+            active={activeVisual} 
+            onClick={setActiveVisual} 
+            icon={Brain} 
+            label="Kranietraume" 
+            sub="Hæmatomer"
+            colorClass="purple"
+        />
+        <NavButton 
+            id="columna" 
+            active={activeVisual} 
+            onClick={setActiveVisual} 
+            icon={MoveVertical} 
+            label="Columna" 
+            sub="Rygmarvsskade"
+            colorClass="emerald"
+        />
       </div>
 
       {/* Active Animation Container */}
@@ -75,10 +68,56 @@ const VisualsGallery: React.FC = () => {
          {activeVisual === 'pneumo' && <PneumothoraxAnimation />}
          {activeVisual === 'compartment' && <CompartmentAnimation />}
          {activeVisual === 'rhabdo' && <RhabdoAnimation />}
+         {activeVisual === 'cranium' && <CraniumAnimation />}
+         {activeVisual === 'columna' && <ColumnaAnimation />}
       </div>
     </div>
   );
 };
+
+// Helper Component for Navigation Buttons to clean up main render
+const NavButton: React.FC<{
+    id: VisualType, 
+    active: VisualType, 
+    onClick: (id: VisualType) => void, 
+    icon: any, 
+    label: string, 
+    sub: string,
+    colorClass: string
+}> = ({ id, active, onClick, icon: Icon, label, sub, colorClass }) => {
+    const isActive = active === id;
+    
+    // Color mapping
+    const colors: Record<string, {active: string, ring: string, iconBg: string, iconColor: string}> = {
+        blue: { active: 'border-blue-500 bg-blue-50', ring: 'ring-blue-200', iconBg: 'bg-blue-200', iconColor: 'text-blue-700' },
+        red: { active: 'border-red-500 bg-red-50', ring: 'ring-red-200', iconBg: 'bg-red-200', iconColor: 'text-red-700' },
+        amber: { active: 'border-amber-500 bg-amber-50', ring: 'ring-amber-200', iconBg: 'bg-amber-200', iconColor: 'text-amber-700' },
+        purple: { active: 'border-purple-500 bg-purple-50', ring: 'ring-purple-200', iconBg: 'bg-purple-200', iconColor: 'text-purple-700' },
+        emerald: { active: 'border-emerald-500 bg-emerald-50', ring: 'ring-emerald-200', iconBg: 'bg-emerald-200', iconColor: 'text-emerald-700' },
+    };
+
+    const c = colors[colorClass];
+
+    return (
+        <button 
+          onClick={() => onClick(id)}
+          className={`p-3 rounded-xl border-2 text-left transition-all hover:-translate-y-1 relative overflow-hidden ${
+            isActive 
+              ? `${c.active} ring-2 ${c.ring}` 
+              : 'border-slate-200 bg-white hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className={`p-2 rounded-lg ${isActive ? c.iconBg : 'bg-slate-100'}`}>
+              <Icon className={`w-5 h-5 ${isActive ? c.iconColor : 'text-slate-600'}`} />
+            </div>
+            {isActive && <PlayCircle className={`w-4 h-4 ${c.iconColor}`} />}
+          </div>
+          <h3 className="font-bold text-slate-800 text-sm">{label}</h3>
+          <p className="text-[10px] text-slate-500 mt-0.5 uppercase tracking-wide">{sub}</p>
+        </button>
+    );
+}
 
 // --- PNEUMOTHORAX ---
 const PneumothoraxAnimation: React.FC = () => {
@@ -357,6 +396,188 @@ const RhabdoAnimation: React.FC = () => {
       </div>
     </div>
   );
+};
+
+// --- CRANIUM (BRAIN) ---
+const CraniumAnimation: React.FC = () => {
+  const [bleedingType, setBleedingType] = useState<'normal' | 'epidural' | 'subdural'>('normal');
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="bg-purple-900 p-4 text-white flex justify-between items-center">
+         <h3 className="text-lg font-bold flex items-center gap-2"><Brain className="w-5 h-5"/> Kranietraumer</h3>
+      </div>
+      
+      <div className="flex flex-col md:flex-row flex-1">
+        <div className="flex-1 bg-purple-50 p-8 flex items-center justify-center relative min-h-[300px]">
+           <svg viewBox="0 0 200 200" className="w-full max-w-sm drop-shadow-xl">
+              {/* Skull */}
+              <circle cx="100" cy="100" r="95" fill="#f8fafc" stroke="#94a3b8" strokeWidth="6" />
+              
+              {/* Brain (Left Hemisphere - Affected) */}
+              <path 
+                d={
+                    bleedingType === 'epidural' ? "M100,20 Q40,20 20,80 Q20,160 100,180" : 
+                    bleedingType === 'subdural' ? "M100,20 Q50,20 35,80 Q35,160 100,180" :
+                    "M100,20 Q20,20 20,100 Q20,180 100,180"
+                } 
+                fill="#fca5a5" 
+                stroke="#fda4af" 
+                className="transition-all duration-700"
+              />
+
+              {/* Brain (Right Hemisphere - Normal) */}
+              <path d="M100,20 Q180,20 180,100 Q180,180 100,180" fill="#fca5a5" stroke="#fda4af" />
+
+              {/* Midline / Falx */}
+              <path 
+                d={bleedingType === 'normal' ? "M100,20 L100,180" : "M100,20 Q110,100 100,180"} 
+                stroke="#be123c" strokeWidth="1" strokeDasharray="4 2" className="transition-all duration-700" 
+              />
+
+              {/* Epidural Hematoma (Lens shape OUTSIDE dura/brain curve) */}
+              <path 
+                d="M25,60 Q55,100 25,140 Q5,100 25,60 Z" 
+                fill="#dc2626" 
+                className={`transition-opacity duration-500 ${bleedingType === 'epidural' ? 'opacity-100' : 'opacity-0'}`} 
+              />
+
+              {/* Subdural Hematoma (Crescent shape FOLLOWING brain curve) */}
+              <path 
+                d="M25,40 Q60,100 25,160 Q40,100 25,40 Z" 
+                fill="#7f1d1d" 
+                className={`transition-opacity duration-500 ${bleedingType === 'subdural' ? 'opacity-100' : 'opacity-0'}`} 
+              />
+              
+              {/* Labels */}
+              <text x="100" y="195" fontSize="8" textAnchor="middle" fill="#64748b">Tværsnit af hjernen</text>
+              {bleedingType !== 'normal' && (
+                 <g className="animate-pulse">
+                    <text x="140" y="100" fontSize="8" fill="#dc2626" fontWeight="bold">Masseeffekt</text>
+                    <path d="M120,100 L135,100" stroke="#dc2626" strokeWidth="1" markerEnd="url(#arrow)" />
+                 </g>
+              )}
+           </svg>
+        </div>
+
+        <div className="w-full md:w-1/3 bg-white p-6 border-l border-slate-200 flex flex-col justify-center">
+            <h4 className="font-bold text-slate-800 mb-4 uppercase text-sm tracking-wider">Vælg Skadestype</h4>
+            <div className="space-y-3">
+                <button onClick={() => setBleedingType('normal')} className={`w-full p-4 rounded-xl border text-left flex items-center gap-3 transition-colors ${bleedingType === 'normal' ? 'bg-green-50 border-green-500 text-green-800' : 'hover:bg-slate-50'}`}>
+                    <div className="w-4 h-4 rounded-full bg-green-500"></div>
+                    <div>
+                        <div className="font-bold text-sm">Normal Hjerne</div>
+                        <div className="text-xs opacity-75">Ingen blødning</div>
+                    </div>
+                </button>
+                <button onClick={() => setBleedingType('epidural')} className={`w-full p-4 rounded-xl border text-left flex items-center gap-3 transition-colors ${bleedingType === 'epidural' ? 'bg-red-50 border-red-500 text-red-800' : 'hover:bg-slate-50'}`}>
+                    <div className="w-4 h-4 rounded-full bg-red-500"></div>
+                    <div>
+                        <div className="font-bold text-sm">Epiduralt Hæmatom</div>
+                        <div className="text-xs opacity-75">Arteriel blødning (linseform)</div>
+                    </div>
+                </button>
+                <button onClick={() => setBleedingType('subdural')} className={`w-full p-4 rounded-xl border text-left flex items-center gap-3 transition-colors ${bleedingType === 'subdural' ? 'bg-purple-50 border-purple-800 text-purple-900' : 'hover:bg-slate-50'}`}>
+                    <div className="w-4 h-4 rounded-full bg-purple-900"></div>
+                    <div>
+                        <div className="font-bold text-sm">Subduralt Hæmatom</div>
+                        <div className="text-xs opacity-75">Venøs blødning (halvmåne)</div>
+                    </div>
+                </button>
+            </div>
+            <div className="mt-6 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg">
+                <p><strong>Bemærk:</strong> Se hvordan blødningen presser hjernen væk fra midten (midtlinjeskift). Dette øger trykket i kraniet (ICP) livstruende.</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- COLUMNA (SPINE) ---
+const ColumnaAnimation: React.FC = () => {
+    const [compression, setCompression] = useState(0);
+
+    return (
+      <div className="flex flex-col h-full">
+        <div className="bg-emerald-900 p-4 text-white flex justify-between items-center">
+           <h3 className="text-lg font-bold flex items-center gap-2"><MoveVertical className="w-5 h-5"/> Columnatraumer</h3>
+           <span className="font-mono bg-emerald-800 px-2 py-1 rounded text-sm">{compression}% Kompression</span>
+        </div>
+        
+        <div className="flex flex-col md:flex-row flex-1">
+          <div className="flex-1 bg-emerald-50/50 p-8 flex items-center justify-center relative overflow-hidden">
+             <svg viewBox="0 0 200 200" className="w-full max-w-sm drop-shadow-xl">
+                {/* Vertebrae Body (Bottom) */}
+                <path d="M40,140 Q100,180 160,140 L160,110 Q100,150 40,110 Z" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="2" />
+                
+                {/* Spinal Canal Background */}
+                <circle cx="100" cy="80" r="30" fill="#0f172a" />
+                
+                {/* Spinal Cord (Yellow/White) - Gets squished */}
+                <ellipse 
+                    cx="100" 
+                    cy="80" 
+                    rx={20 - (compression * 0.15)} 
+                    ry={20} 
+                    fill={compression > 80 ? "#ef4444" : "#fef08a"} 
+                    className="transition-all duration-300"
+                />
+
+                {/* Signals (Lightning) */}
+                {compression < 80 ? (
+                    <g className="animate-pulse">
+                        <path d="M95,60 L105,70 L95,80 L105,90" stroke="#eab308" strokeWidth="2" fill="none" />
+                    </g>
+                ) : (
+                    <text x="100" y="85" fontSize="10" fill="white" fontWeight="bold" textAnchor="middle">STOP</text>
+                )}
+
+                {/* Bone Fragment / Disc Herniation moving in */}
+                <path 
+                    d="M70,120 Q100,100 130,120" 
+                    fill="#cbd5e1" 
+                    stroke="#64748b" 
+                    className="transition-all duration-300"
+                    transform={`translate(0, ${-compression * 0.4})`}
+                />
+
+                {/* Vertebrae Arch (Top) */}
+                <path d="M40,50 Q20,80 40,110 M160,50 Q180,80 160,110 M40,50 Q100,10 160,50" stroke="#94a3b8" strokeWidth="3" fill="none" strokeLinecap="round" />
+                
+                {/* Warning Text */}
+                {compression > 75 && (
+                    <text x="100" y="30" fontSize="12" fill="red" fontWeight="bold" textAnchor="middle" className="animate-bounce">PARALYSE RISIKO!</text>
+                )}
+             </svg>
+          </div>
+  
+          <div className="w-full md:w-1/3 bg-white p-6 border-l border-slate-200 flex flex-col justify-center">
+             <h4 className="font-bold text-slate-800 mb-4 uppercase text-sm tracking-wider">Simuler Kompression</h4>
+             
+             <div className="mb-8">
+               <input 
+                 type="range" 
+                 min="0" 
+                 max="100" 
+                 value={compression} 
+                 onChange={(e) => setCompression(parseInt(e.target.value))}
+                 className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+               />
+               <p className="text-center mt-2 font-bold text-slate-700">{compression}% Tryk</p>
+             </div>
+             
+             <div className={`p-4 rounded-xl text-sm border transition-colors ${compression > 80 ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-100'}`}>
+                <p className="leading-relaxed mb-2">
+                    {compression < 30 && "Normal tilstand. Rygmarven har god plads i spinalkanalen. Nervesignaler passerer frit."}
+                    {compression >= 30 && compression < 80 && "Kompression! Et knoglefragment eller en diskusprolaps trykker på rygmarven. Patienten kan opleve smerter, føleforstyrrelser eller nedsat kraft."}
+                    {compression >= 80 && <span className="text-red-700 font-bold">KRITISK! Rygmarven er helt afklemt. Nervesignalerne kan ikke passere. Dette medfører lammelse (paralyse) nedenfor skadesstedet.</span>}
+                </p>
+             </div>
+          </div>
+        </div>
+      </div>
+    );
 };
 
 const StatusDot: React.FC<{active: boolean, color: string}> = ({active, color}) => (
